@@ -60,9 +60,9 @@ module "blog-alb" {
     ex-http-https-redirect = {
       port     = 80
       protocol = "HTTP"
-      }
     }
   }
+
 
   target_groups = {
     ex-instance = {
