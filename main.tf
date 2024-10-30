@@ -74,16 +74,16 @@ module "blog-alb" {
     }
   ]
 
-  http_tcp_listener = [
-    {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
-    }
-  ]
+  listeners = {
+    ex-tcp = {
+      port                = 80
+      protocol            = "HTTP"
+      target_group_index  = 0
+  }
+    
   tags = {
     Environment = "Development"
-    Project     = "Example"
+    Project     = "learning terraform"
   }
 }
 
