@@ -27,10 +27,6 @@ resource "aws_instance" "web" {
   }
 }
 
-resource "aws_lb_listener" "blog-listener" {
-
-}
-
 data "aws_vpc" "default" {
   default = true
 }
@@ -63,24 +59,28 @@ module "blog-alb" {
     bucket = "my-alb-logs"
   }
 
-   listeners = {
-    ex-http = {
+
+  target_groups = [
+    {
+      name_prefix      = "blog-"
+      backend_protocol = "HTTP"
+      backend_port     = 80
+      target_type      = "instance"
+      targets = {
+        my_target = {
+          target_id = aws_instance.web.id
+        }
+      }
+    }
+  ]
+
+  http_tcp_listener = [
+    {
       port               = 80
       protocol           = "HTTP"
       target_group_index = 0
     }
-  }
-
-  target_groups = {
-    ex-instance = {
-      name_prefix      = "blog-"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
-      target_id        = aws_instance.web.id
-    }
-  }
-
+  ]
   tags = {
     Environment = "Development"
     Project     = "Example"
