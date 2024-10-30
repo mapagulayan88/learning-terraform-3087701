@@ -47,7 +47,38 @@ module "blog_vpc" {
   }
 }
 
+module "blog-alb" {
+  source = "terraform-aws-modules/alb/aws"
 
+  name    = "my-alb"
+  vpc_id  = module.blog_vpc.vpc_id
+  subnets = module.blog_vpc.public_subnets
+  security_groups = [module.blog_sg.security_group_id]
+
+
+  listeners = {
+    ex-http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
+      }
+    }
+  }
+
+  target_groups = {
+    ex-instance = {
+      name_prefix      = "blog-"
+      protocol         = "HTTP"
+      port             = 80
+      target_type      = "instance"
+      target_id        = aws.instance.web.id
+    }
+  }
+
+  tags = {
+    Environment = "Development"
+    Project     = "Example"
+  }
+}
 
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
