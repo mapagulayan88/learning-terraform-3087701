@@ -61,9 +61,11 @@ module "blog-alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      targets ={
-        target_id      = aws_instance.web.id
-        port           = 80
+      targets = {
+        my_target = {
+          target_id      = aws_instance.web.id
+          port           = 80
+        }
       }
     }
   }
@@ -74,7 +76,7 @@ module "blog-alb" {
       protocol = "HTTP"
     }
   }
-  
+
   tags = {
     Environment = "Development"
     Project     = "Example"
