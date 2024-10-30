@@ -53,19 +53,19 @@ module "blog-alb" {
   name           = "my-alb"
   vpc_id         = module.blog_vpc.vpc_id
   subnets        = module.blog_vpc.public_subnets
-  security_group = module.blog_sg.security_group_id
+  security_group = [module.blog_sg.security_group_id]
 
   access_logs = {
     bucket = "my-alb-logs"
   }
 
-  http_tcp_listeners = [
-    {
+   listeners = {
+    ex-http = {
       port               = 80
       protocol           = "HTTP"
       target_group_index = 0
     }
-  ]
+  }
 
   target_groups = {
     ex-instance = {
