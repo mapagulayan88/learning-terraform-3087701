@@ -27,6 +27,10 @@ resource "aws_instance" "web" {
   }
 }
 
+resource "aws_lb_listener" "blog-listener" {
+
+}
+
 data "aws_vpc" "default" {
   default = true
 }
